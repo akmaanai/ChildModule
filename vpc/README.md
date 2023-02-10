@@ -12,17 +12,6 @@ No requirements.
 ```terraform
 
 module "vpc" {
-  source                           = "../../modules/vpc"
-  availability_zones_count         = 2
-  availability_zones_count_private = 3
-  subnet_cidr_bits                 = 8
-  project                          = "Akzhol"
-  tagname_env                      = "dev"
-}
-
-```terraform
-
-module "vpc" {
   source                           = "git::https://github.com/AkzholS7/ChildModule.git//vpc?ref=main"
   availability_zones_count         = 2
   availability_zones_count_private = 3
