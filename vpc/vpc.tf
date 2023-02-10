@@ -1,6 +1,6 @@
 # VPC
 resource "aws_vpc" "this" {
-  cidr_block = var.vpc_cidr
+  cidr_block = var.vpc_cidr != "10.0.0.0/16" ? "10.0.0.0/16" : null
 
   enable_dns_hostnames = true
   enable_dns_support   = true
@@ -22,7 +22,7 @@ resource "aws_subnet" "public" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name                                           = "${var.project}-public-sg"
+    Name                                           = join("-", ["${var.project}", "public-sg"])
     "kubernetes.io/cluster/${var.project}-cluster" = "shared"
     "kubernetes.io/role/elb"                       = 1
     environment = var.tagname_env
@@ -40,7 +40,7 @@ resource "aws_subnet" "private" {
   availability_zone = data.aws_availability_zones.available.names[count.index]
 
   tags = {
-    Name                                           = "${var.project}-private-sg"
+    Name                                           = join("-", ["${var.project}", "private-sg"])
     "kubernetes.io/cluster/${var.project}-cluster" = "shared"
     "kubernetes.io/role/internal-elb"              = 1
     environment = var.tagname_env
@@ -53,7 +53,7 @@ resource "aws_internet_gateway" "this" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    "Name" = "${var.project}-igw"
+    "Name" = join("-", ["${var.project}", "igw"])
     environment = var.tagname_env
   }
 
@@ -71,7 +71,7 @@ resource "aws_route_table" "main" {
   }
 
   tags = {
-    Name = "${var.project}-Default-rt"
+    Name = join("-", ["${var.project}", "Default-rt"])
     environment = var.tagname_env
   }
 }
@@ -87,7 +87,7 @@ resource "aws_eip" "main" {
   vpc = true
 
   tags = {
-    Name = "${var.project}-ngw-ip"
+    Name = join("-", ["${var.project}", "ngw-ip"])
     environment = var.tagname_env
   }
 }
@@ -98,7 +98,7 @@ resource "aws_nat_gateway" "main" {
   subnet_id     = aws_subnet.public[0].id
 
   tags = {
-    Name = "${var.project}-ngw"
+    Name = join("-", ["${var.project}", "ngw"])
     environment = var.tagname_env
   }
 }
@@ -116,7 +116,7 @@ resource "aws_security_group" "public_sg" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${var.project}-Public-sg"
+    Name = join("-", ["${var.project}", "Public-sg"])
     environment = var.tagname_env
   }
 }
@@ -155,7 +155,7 @@ resource "aws_security_group" "data_plane_sg" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${var.project}-Worker-sg"
+    Name = join("-", ["${var.project}", "Worker-sg"])
     environment = var.tagname_env
   }
 }
@@ -196,7 +196,7 @@ resource "aws_security_group" "control_plane_sg" {
   vpc_id = aws_vpc.this.id
 
   tags = {
-    Name = "${var.project}-ControlPlane-sg"
+    Name = join("-", ["${var.project}", "ControlPlane-sg"])
     environment = var.tagname_env
     
   }

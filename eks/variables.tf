@@ -51,11 +51,13 @@ locals {
 }
 
 variable "vpc_id" {
+  description = "virtual network id"
 
 
 }
 
 variable "private_subnet" {
+  description = "private subnet"
 
 }
 

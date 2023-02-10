@@ -46,5 +46,6 @@ variable "tags" {
 }
 
 variable "tagname_env" {
+  description = "Defining the resource in which environment it stays"
   
 }
