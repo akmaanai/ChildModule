@@ -15,7 +15,7 @@ resource "aws_instance" "bastion" {
 resource "aws_ec2_tag" "bastiantag" {
   resource_id = aws_instance.bastion.id
   key         = "Name"
-  value       = "Bastian_Server"
+  value       = "Bastion_Server"
 }
 
 resource "aws_eip" "bas_ip" {
