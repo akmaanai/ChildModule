@@ -56,10 +56,7 @@ variable "vpc_id" {
 
 }
 
-variable "private_subnet" {
-  description = "private subnet"
 
-}
 variable "public_subnet" {
 
   description = "public subnet"
